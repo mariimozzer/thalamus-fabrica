@@ -2,7 +2,7 @@
   <footer :class="['footer', responsiveClass]">
     <!-- Copyright -->
     <div class="text-center p-3">
-      © 2024 Copyright: Zontec
+      © {{ anoAtual }} Copyright: Zontec
       <!-- <a style="color: white;" href="https://roboflex.com.br/" target="_blank">Roboflex</a> -->
     </div>
     <!-- Copyright -->
@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       responsiveClass: 'lg-start',
+      anoAtual: null,
     };
   },
   computed: {
@@ -29,6 +30,7 @@ export default {
   mounted() {
     this.setResponsiveClass(this.windowWidth);
     window.addEventListener('resize', this.handleResize);
+    this.mostraAnoAtual()
   },
   beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
@@ -46,6 +48,11 @@ export default {
         this.responsiveClass = 'lg-start';
       }
     },
+    mostraAnoAtual(){
+      const date = new Date();
+      const currentYear = date.getFullYear();
+      this.anoAtual = currentYear
+    }
   },
 };
 </script>
