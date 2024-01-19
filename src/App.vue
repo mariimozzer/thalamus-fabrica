@@ -5,8 +5,7 @@
                 <NovoMenu v-if="!$route.meta.hideMenu"></NovoMenu>
             </div>
         </header>
-    
-        <div class="router">
+            <div class="router">
             <br><br><br>
             <router-view />
         </div>
@@ -16,7 +15,6 @@
 
 <script>
 import NovoMenu from "@/components/Menu/NovoMenu.vue"
-
 import FooterComponent from "@/components/Footer/FooterComponent"
 
 export default {
@@ -28,7 +26,6 @@ export default {
 
     components: {
         NovoMenu: NovoMenu,
-
         FooterComponent: FooterComponent,
     }
 }
@@ -41,8 +38,8 @@ export default {
     --botao-hover: #FBBF77;
     --botao-secondary: #AAAAAA;
     --botao-secondary-hover: #C2BFBF;
-    --botao-portfolio:#7C665B;
-    --botao-portfolio-hover:#ececec;
+    --botao-portfolio: #3B373B;
+    --botao-portfolio-hover: #5f5f5f;
     --menu-lateral-background: #333;
     --menu-lateral-botao: #444;
     --menu-lateral-borda: #555;
@@ -104,16 +101,16 @@ export default {
 }
 
 .btn-secondary {
-    background-color: var(botao-portfolio) !important;
-    margin: 6px 0 !important;
-    border: none !important;
-}
-.btn-secondary:hover {
-  background-color: var(botao-portfolio-hover) !important;
+    background-color: var(--botao-portfolio) !important;
     margin: 6px 0 !important;
     border: none !important;
 }
 
+.btn-secondary:hover {
+    background-color: var(--botao-portfolio-hover) !important;
+    margin: 6px 0 !important;
+    border: none !important;
+}
 
 .btn-filter {
     background-color: var(--botao) !important;

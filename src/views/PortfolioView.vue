@@ -2,27 +2,27 @@
     <div class="container">
     
         <div class="col-sm-12" style="text-align: center;">
-            <h2 class="titulo">Portfólio de Processos</h2>
+            <h2 class="titulo">Processos de Produção</h2>
             <hr>
         </div>
     
-        <div class="row mb-5" >
+        <div class="row mb-5">
             <div class="col-lg-2">
-                <label class="control-label nowrap" for="cliente">Cliente</label>
-                <select v-model="filtro.cliente" id="cliente" class="form-control form-select col-12">
-                                          <!-- <option v-for="setor in listaSetores" :key="setor.id" :value="setor.id">
-                                              {{ setor.nome }}
-                                          </option> -->
-                                      </select> </div>
+                <label class="nowrap" for="cliente">Cliente</label>
+                <select v-model="filtro.nome" id="cliente" class="form-control form-select col-12">
+                                                      <option v-for="item in propostaComercial" :key="item.id" :value="item.id">
+                                                          {{ item }}
+                                                      </option>
+                                                  </select> </div>
     
             <div class="col-lg-2">
                 <label class="nowrap" for="produto">Produto</label>
                 <select v-model="filtro.produto" id="produto" class="form-control form-select col-12">
-                    
-                                          <!-- <option v-for="setor in listaSetores" :key="setor.id" :value="setor.id">
-                                              {{ setor.nome }}
-                                          </option> -->
-                                      </select> </div>
+                                
+                            <option v-for="item in propostaComercial" :key="item.id" :value="item.id">
+                                                          {{ item }}
+                                                      </option>
+                                                  </select> </div>
     
             <div class="col-lg-2">
                 <label class="control-label" for="dataInicial">Data Início</label>
@@ -44,13 +44,12 @@
     
             <div class="col-lg-2">
     
-                <input type="checkbox" id="incluir" v-model="checked" />
+                <input type="checkbox" id="incluir"  />
                 <label for="incluir">&nbsp;Incluir Concluídas</label>
     
     
             </div>
             <div class="col-lg-2">
-    
     
     
     
@@ -60,7 +59,7 @@
         <div class="row justify-content-center mb-5">
             <div class="col-md-3 ml-2">
                 <button @click="pesquisar" class="btn btn-secondary col-12">Pesquisar&nbsp;&nbsp;<i
-                                              class="fa-solid fa-magnifying-glass"></i></button>
+                                                          class="fa-solid fa-magnifying-glass"></i></button>
             </div>
             <div class="col-md-3">
                 <button @click="limparCampos" class="btn btn-secondary col-12">Limpar&nbsp;</button>
@@ -70,9 +69,7 @@
         <div class="table-responsive">
             <!-- <table v-if="dadosFiltro && dadosFiltro.length > 0" class="table" id="tabela-acessos"> -->
             <table class="table" id="tabela-portifolio">
-    
                 <thead>
-    
                     <tr style="text-align: center; ">
                         <th>OP</th>
                         <th>Cliente</th>
@@ -83,9 +80,6 @@
                         <th>Obs</th>
                         <th>Progresso</th>
                         <th>OTIF</th>
-    
-    
-    
                     </tr>
                 </thead>
                 <tbody>
@@ -104,8 +98,6 @@
             </table>
         </div>
     
-    
-    
         <div v-if="!filtroVazio" style="text-align: center;">
             <p>Total de registros: {{ totalResultado }}</p>
         </div>
@@ -118,6 +110,7 @@
 
 <script>
 // import api from '../../services/api';
+import axios from 'axios';
 import moment from 'moment-timezone';
 
 export default {
@@ -131,23 +124,43 @@ export default {
     data() {
         return {
             filtro: {
-                inicial: null,
-                final: null,
-                nome: null,
-
+                // inicial: null,
+                // final: null,
+                // nome: null
             },
-            dadosFiltro: [],
 
+
+            dadosFiltro: [],
             filtroVazio: false,
             totalResultado: null,
+            cliente: '',
+            propostaComercial: []
         };
     },
 
-    mounted() {
+    created() {
         this.dataAtual();
+        this.getClientes()
     },
 
     methods: {
+
+        getClientes() {
+
+            axios.post('http://192.168.0.6:8000/api/omie/oportunidade/proposta-viabilizada/detalhe', {
+                    anoSemana: 202305
+                }).then((response) => {
+                    this.propostaComercial = response.data;
+                    this.propostaComercial = this.propostaComercial.map((item) => item.cDesOp.slice(1).slice(0, -1));
+                    // console.log(response);
+                    // console.log(this.propostaComercial);
+                })
+
+                .catch((error) => {
+                    console.error(error);
+                });
+
+        },
 
         formatarDataHora(valor) {
             if (valor) {
@@ -227,15 +240,13 @@ export default {
                 inicial: "",
                 final: "",
                 nome: "",
+                produto: "",
                 setor: null,
                 local: null,
-                visitante: null,
+                ordem: null,
             };
             this.dadosFiltro = [];
-            this.setorSelecionado = null;
-            this.localSelecionado = null;
-            this.pagina = 1;
-            this.totalPaginas = 1;
+          
             this.filtroVazio = false;
             this.totalResultado = null;
         },
